@@ -24,6 +24,7 @@ func separateWithComma(strInt string) string {
 	return separateWithComma(strInt[:n-3]) + "," + strInt[n-3:]
 }
 
+//Exercise 3.10: Write a non-recursive version of comma, using bytes.Buffer instead of string concatenation.
 func separateWithCommaUsingBytesBuffer(strInt string) string {
 	n := len(strInt)
 	if n <= 3 {
@@ -47,6 +48,7 @@ func separateWithCommaUsingBytesBuffer(strInt string) string {
 	return buf.String()
 }
 
+// Exercise 3.11: Enhance comma so that it deals correctly with floating-point numbers and an optional sign.
 func separateSignedFloatingNumbersWithComma(strFloat string) string {
 	buf := new(bytes.Buffer)
 
