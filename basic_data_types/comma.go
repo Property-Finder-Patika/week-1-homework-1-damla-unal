@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"strings"
 )
 
 func main() {
@@ -10,6 +11,8 @@ func main() {
 	fmt.Println(separateWithCommaUsingBytesBuffer("12345")) //12,345
 	fmt.Println(separateWithComma("123"))                   //123
 	fmt.Println(separateWithCommaUsingBytesBuffer("123"))   //123
+
+	fmt.Println(separateSignedFloatingNumbersWithComma("-12345.678")) //-12,345.678
 }
 
 // comma inserts commas in a non-negative decimal integer string.
@@ -41,5 +44,38 @@ func separateWithCommaUsingBytesBuffer(strInt string) string {
 		i, j = j, j+3
 	}
 	buf.WriteString("," + strInt[i:])
+	return buf.String()
+}
+
+func separateSignedFloatingNumbersWithComma(strFloat string) string {
+	buf := new(bytes.Buffer)
+
+	// find decimal point of floating number
+	n := strings.Index(strFloat, ".")
+	if n == -1 {
+		n = len(strFloat)
+	}
+
+	// check if the number has a sign
+	if strings.HasPrefix(strFloat, "+") || strings.HasPrefix(strFloat, "-") {
+		buf.WriteByte(strFloat[0])
+		strFloat = strFloat[1:]
+		n--
+	}
+
+	i := n % 3
+	if i == 0 {
+		i = 3
+	}
+	buf.WriteString(strFloat[:i])
+
+	for j, c := range strFloat[i:n] {
+		if j%3 == 0 {
+			buf.WriteString(",")
+		}
+		buf.WriteRune(c)
+	}
+	buf.WriteString(strFloat[n:])
+
 	return buf.String()
 }
